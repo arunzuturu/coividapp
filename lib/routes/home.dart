@@ -238,6 +238,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     LocationPermission permission;
     Position pos;
     permission = await Geolocator.checkPermission();
+    pos =  await Geolocator.getCurrentPosition();
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
@@ -268,7 +269,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    pos =  await Geolocator.getCurrentPosition();
+
     print(pos.latitude);
     print(pos.longitude);
   }
