@@ -414,6 +414,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 fontWeight: FontWeight.w700,
                                               ),
                                             ),
+
                                           ],
                                         ),
                                       ),
@@ -504,14 +505,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ListTile(
                   title: TextMainNormal('Find Vaccine', 14),
                   onTap: () {
-                    Navigator.popAndPushNamed(context, '/getvaccine');
+                   // Navigator.popAndPushNamed(context, '/getvaccine');
                   },
                 ),
                 SizedBox(
                   height: 40,
                 ),
                 Center(child: TextMainNormal("Other", 12)),
-                ListTile(
+          /*
+           ListTile(
                   title: TextMainNormal('About this app', 14),
                   onTap: () {
                     showDialog(
@@ -526,8 +528,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             elevation: 6,
                           ));
                         });
+
                   },
                 ),
+                */
+
                 ListTile(
                   title: TextMainNormal('Add corona discord bot', 14),
                   onTap: _launchURL,
