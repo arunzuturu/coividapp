@@ -1,15 +1,19 @@
 import 'package:covid/api/api.dart';
+import 'package:covid/routes/auth.dart';
 import 'package:covid/routes/safety.dart';
 import 'package:covid/routes/splash.dart';
 import 'package:covid/routes/treatment.dart';
+import 'package:covid/routes/uilogin.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:covid/routes/home.dart';
 import 'package:covid/routes/symptoms.dart';
 import 'package:covid/routes/getvaccine.dart';
 import 'package:covid/routes/aboutVaccination.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -26,6 +30,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
+        '/signin':(context) => SignupPage(), //LoginScreen()
         '/home': (context) => Home(),
         '/symptoms': (context) => Symptoms(),
         '/safety': (context) => Safety(),

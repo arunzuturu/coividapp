@@ -1,5 +1,6 @@
 import 'package:covid/api/api.dart';
 import 'package:covid/widget/countup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:covid/widget/text.dart';
 import 'package:flutter/services.dart';
@@ -215,6 +216,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   ];
   var data = "";
   var dropdownValue = "global";
+  final auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
@@ -230,6 +232,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     var screenSize = MediaQuery.of(context).size;
     var width = screenSize.width;
     var height = screenSize.height;
@@ -242,271 +245,213 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return SafeArea(
       child: Scaffold(
         key: scaffoldKey,
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    scaffoldKey.currentState!.openDrawer();
-                  },
-                  icon: Icon(
-                    Icons.menu,
-                    color: Colors.black,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 0, left: 10, right: 10, bottom: 10),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      scaffoldKey.currentState!.openDrawer();
+                    },
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.black,
+                    ),
+                    iconSize: 24,
                   ),
-                  iconSize: 24,
-                ),
-                TextMain('Covid-19 Case Tracker', 20),
-                Padding(padding: EdgeInsets.all(16)),
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
-            ),
-            SizedBox(
-              height: height - 93,
-              width: width,
-              child: LayoutBuilder(builder:
-                  (BuildContext context, BoxConstraints viewportConstraints) {
-                return SingleChildScrollView(
-                  child: Container(
-                    //color: Colors.blue,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Image(
-                            width: 250,
-                            height: 250,
-                            image: AssetImage("assets/man_with_mask_logo.png"),
+                  TextMain('Covid-19 App', 20),
+                  Padding(padding: EdgeInsets.all(16)),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
+              ),
+              SizedBox(
+                height: height - 93,
+                width: width,
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints viewportConstraints) {
+                  return SingleChildScrollView(
+                    child: Container(
+                      //color: Colors.blue,
+                      child: Column(
+                        children: [
+                          Center(
+                            child: Image(
+                              width: 250,
+                              height: 250,
+                              image: AssetImage("assets/man_with_mask_logo.png"),
+                            ),
                           ),
-                        ),
-                        DropdownButton(
-                            value: dropdownValue,
-                            hint: Text('Select country'),
-                            onChanged: (String? newvalue) {
-                              setState(() {
-                                dropdownValue = newvalue!;
-                                var response =
-                                    GetCases(newvalue).getCases().then((res) {
-                                  setState(() {
-                                    var confirmed = res['confirmed']['value'];
-                                    recovered = res['recovered']['value'];
-                                    deaths = res['deaths']['value'];
-                                    active = confirmed - (recovered + deaths);
+                          DropdownButton(
+                              value: dropdownValue,
+                              hint: Text('Select country'),
+                              onChanged: (String? newvalue) {
+                                setState(() {
+                                  dropdownValue = newvalue!;
+                                  var response =
+                                      GetCases(newvalue).getCases().then((res) {
+                                    setState(() {
+                                      var confirmed = res['confirmed']['value'];
+                                      recovered = res['recovered']['value'];
+                                      deaths = res['deaths']['value'];
+                                      active = confirmed - (recovered + deaths);
+                                    });
                                   });
                                 });
-                              });
-                            },
-                            items: countries.map((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList()),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          child: Column(children: [
-                            TextMain(data, 14),
-                            SizedBox(
-                              height: 200,
-                              width: 300,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 2.0,
-                                          spreadRadius: 0.0,
-                                          offset: Offset(0.0, 0.0))
-                                    ]),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    TextActive("   Active Cases", 20),
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    Padding(padding: EdgeInsets.all(12)),
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          Countup(
-                                            begin: 0,
-                                            end: active.toDouble(),
-                                            duration: Duration(seconds: 2),
-                                            separator: ',',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w700,
+                              },
+                              items: countries.map((String value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList()),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            child: Column(children: [
+                              TextMain(data, 14),
+                              SizedBox(
+                                height: 200,
+                                width: 300,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 2.0,
+                                            spreadRadius: 0.0,
+                                            offset: Offset(0.0, 0.0))
+                                      ]),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.all(5)),
+                                      TextActive("   Active Cases", 20),
+                                      Padding(padding: EdgeInsets.all(5)),
+                                      Padding(padding: EdgeInsets.all(12)),
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            Countup(
+                                              begin: 0,
+                                              end: active.toDouble(),
+                                              duration: Duration(seconds: 2),
+                                              separator: ',',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 51,
-                                    ),
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
+                                          ],
                                         ),
                                       ),
-                                      child: Container(
-                                        height: 30,
-                                        width: 300,
+                                      SizedBox(
+                                        height: 51,
                                       ),
-                                    )
-                                  ],
+                                      DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
+                                          ),
+                                        ),
+                                        child: Container(
+                                          height: 30,
+                                          width: 300,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 51,
-                            ),
-                            SizedBox(
-                              height: 200,
-                              width: 300,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 2.0,
-                                          spreadRadius: 0.0,
-                                          offset: Offset(0.0, 0.0))
-                                    ]),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    TextActive("   Recovered", 20),
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    Padding(padding: EdgeInsets.all(12)),
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          Countup(
-                                            begin: 0,
-                                            end: recovered.toDouble(),
-                                            duration: Duration(seconds: 2),
-                                            separator: ',',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w700,
+                              SizedBox(
+                                height: 51,
+                              ),
+                              SizedBox(
+                                height: 200,
+                                width: 300,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 2.0,
+                                            spreadRadius: 0.0,
+                                            offset: Offset(0.0, 0.0))
+                                      ]),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(padding: EdgeInsets.all(5)),
+                                      TextActive("   Death", 20),
+                                      Padding(padding: EdgeInsets.all(5)),
+                                      Padding(padding: EdgeInsets.all(12)),
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            Countup(
+                                              begin: 0,
+                                              end: deaths.toDouble(),
+                                              duration: Duration(seconds: 2),
+                                              separator: ',',
+                                              style: GoogleFonts.poppins(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 51,
-                                    ),
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
+
+                                          ],
                                         ),
                                       ),
-                                      child: Container(
-                                        height: 30,
-                                        width: 300,
+                                      SizedBox(
+                                        height: 51,
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 51,
-                            ),
-                            SizedBox(
-                              height: 200,
-                              width: 300,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 2.0,
-                                          spreadRadius: 0.0,
-                                          offset: Offset(0.0, 0.0))
-                                    ]),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    TextActive("   Death", 20),
-                                    Padding(padding: EdgeInsets.all(5)),
-                                    Padding(padding: EdgeInsets.all(12)),
-                                    Center(
-                                      child: Column(
-                                        children: [
-                                          Countup(
-                                            begin: 0,
-                                            end: deaths.toDouble(),
-                                            duration: Duration(seconds: 2),
-                                            separator: ',',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 30,
-                                              fontWeight: FontWeight.w700,
-                                            ),
+                                      DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                   SizedBox(
-                                      height: 51,
-                                    ),
-                                    DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        borderRadius: BorderRadius.only(
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
                                         ),
-                                      ),
-                                      child: Container(
-                                        height: 30,
-                                        width: 300,
-                                      ),
-                                    )
-                                  ],
+                                        child: Container(
+                                          height: 30,
+                                          width: 300,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            //TextMain("How to prevent from COVID-19?", 22)
-                          ]),
-                        ),
-                      ],
+                              SizedBox(
+                                height: 30,
+                              ),
+                              //TextMain("How to prevent from COVID-19?", 22)
+                            ]),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
-            ),
-          ],
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
         drawer: Drawer(
           child: SafeArea(
@@ -548,6 +493,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   title: TextMainNormal('About Vaccine', 14),
                   onTap: () {
                     Navigator.popAndPushNamed(context, '/vaccine');
+                  },
+                ),
+                ListTile(
+                  title: TextMainNormal('Logout', 14),
+                  onTap: () {
+                    auth.signOut();
+                    Navigator.popAndPushNamed(context, '/signin');
                   },
                 ),
                 ListTile(

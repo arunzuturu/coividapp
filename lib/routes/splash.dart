@@ -12,9 +12,9 @@ class _SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 8), () {
+    Future.delayed(Duration(seconds: 5), () {
       // 5s over, navigate to a new page
-      Navigator.popAndPushNamed(context, '/home');
+      Navigator.popAndPushNamed(context, '/signin');
     });
   }
 
