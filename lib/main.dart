@@ -1,4 +1,5 @@
 
+import 'package:covid/routes/isolation.dart';
 import 'package:covid/routes/safety.dart';
 import 'package:covid/routes/signin.dart';
 import 'package:covid/routes/splash.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/safety': (context) => Safety(),
         '/treatment': (context) => Treatment(),
         '/getvaccine': (context) => GetVaccineRoute(),
+        '/isolation' :(context) => CountdownPage(),
 
       },
     );
