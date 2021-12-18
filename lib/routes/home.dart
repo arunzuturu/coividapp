@@ -1,9 +1,12 @@
+
+
 import 'package:covid/api/api.dart';
 import 'package:covid/widget/countup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:covid/widget/text.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -220,6 +223,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+     _determinePosition();
     GetCases(dropdownValue).getCases().then((res) {
       setState(() {
         var confirmed = res['confirmed']['value'];
@@ -229,9 +233,49 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       });
     });
   }
+  void _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    Position pos;
+    permission = await Geolocator.checkPermission();
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    pos =  await Geolocator.getCurrentPosition();
+    print(pos.latitude);
+    print(pos.longitude);
+  }
 
   @override
   Widget build(BuildContext context) {
+
 
     var screenSize = MediaQuery.of(context).size;
     var width = screenSize.width;
@@ -242,10 +286,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         statusBarColor: Colors.black,
       ),
     );
-    return SafeArea(
-      child: Scaffold(
-        key: scaffoldKey,
-        body: SingleChildScrollView(
+    return Scaffold(
+      key: scaffoldKey,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -452,88 +496,61 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
-        drawer: Drawer(
-          child: SafeArea(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                Stack(
-                  children: [
-                    Image(
-                      image: NetworkImage(
-                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ9-FOkOmBBfNqIBPa-zvUxw_pvveKdaI0oQ&usqp=CAU"),
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Center(child: TextMainNormal("About Corona", 12)),
-                ListTile(
-                  title: TextMainNormal('Symptoms', 14),
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, '/symptoms');
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('Safety Measure', 14),
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, '/safety');
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('Home treatment', 14),
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, '/treatment');
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('About Vaccine', 14),
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, '/vaccine');
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('Logout', 14),
-                  onTap: () {
-                    auth.signOut();
-                    Navigator.popAndPushNamed(context, '/signin');
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('Find Vaccine', 14),
-                  onTap: () {
-                    Navigator.popAndPushNamed(context, '/getvaccine');
-                  },
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Center(child: TextMainNormal("Other", 12)),
-                ListTile(
-                  title: TextMainNormal('About this app', 14),
-                  onTap: () {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (context) {
-                          return (AlertDialog(
-                            title: TextMain("COVID-19 Tracker App", 18),
-                            content: TextMainNormal(
-                                "\"This COVID app is used to show the coronavirus status, precaution, and safety measure\"\n\nThis App is created by Manoj Paramsetti",
-                                12),
-                            elevation: 6,
-                          ));
-                        });
-                  },
-                ),
-                ListTile(
-                  title: TextMainNormal('Add corona discord bot', 14),
-                  onTap: _launchURL,
-                ),
-              ],
-            ),
+      ),
+      drawer: Drawer(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Stack(
+                children: [
+                  Image(
+                    image: NetworkImage(
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ9-FOkOmBBfNqIBPa-zvUxw_pvveKdaI0oQ&usqp=CAU"),
+                    fit: BoxFit.fitWidth,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Center(child: TextMainNormal("About Corona", 12)),
+              ListTile(
+                title: TextMainNormal('Symptoms', 14),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/symptoms');
+                },
+              ),
+              ListTile(
+                title: TextMainNormal('Safety Measure', 14),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/safety');
+                },
+              ),
+
+              ListTile(
+                title: TextMainNormal('Find Vaccine', 14),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/getvaccine');
+                },
+              ),
+              ListTile(
+                title: TextMainNormal('Isolate', 14),
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/isolation');
+                },
+              ),
+              ListTile(
+                title: TextMainNormal('Logout', 14),
+                onTap: () {
+                  auth.signOut();
+                  Navigator.popAndPushNamed(context, '/signin');
+                },
+              ),
+              SizedBox(
+                height: 40,
+              ),
+            ],
           ),
         ),
       ),

@@ -1,4 +1,4 @@
-import 'package:covid/api/api.dart';
+
 import 'package:covid/routes/safety.dart';
 import 'package:covid/routes/signin.dart';
 import 'package:covid/routes/splash.dart';
@@ -9,7 +9,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:covid/routes/home.dart';
 import 'package:covid/routes/symptoms.dart';
 import 'package:covid/routes/getvaccine.dart';
-import 'package:covid/routes/aboutVaccination.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,8 +35,8 @@ class MyApp extends StatelessWidget {
         '/symptoms': (context) => Symptoms(),
         '/safety': (context) => Safety(),
         '/treatment': (context) => Treatment(),
-        '/vaccine': (context) => AboutVaccination(),
-        '/getvaccine': (context) => GetVaccineRoute()
+        '/getvaccine': (context) => GetVaccineRoute(),
+
       },
     );
   }

@@ -2,6 +2,8 @@ import 'package:covid/routes/uilogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+
 
 import 'home.dart';
 
@@ -11,6 +13,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 class _LoginPageState extends State<LoginPage> {
+  late Position pos ;
   late String _email, _password;
   final auth = FirebaseAuth.instance;
   @override
@@ -111,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: InkWell(
                           onTap: (){
+
                             auth.signInWithEmailAndPassword(email: _email, password: _password).then((_){
                               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
                             });

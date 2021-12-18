@@ -92,288 +92,290 @@ class _GetVaccineRouteState extends State<GetVaccineRoute> {
 
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          children: [
-            // Navbar
-            navBar(context),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Navbar
+              navBar(context),
 
-            // Body
-            // Scrollable widget
-            Container(
-              padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
-            ),
-            SizedBox(
-              height: height - 82,
-              width: width,
-              child: LayoutBuilder(builder:
-                  (BuildContext context, BoxConstraints viewportConstraints) {
-                return SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Image(
-                          width: 250,
-                          height: 250,
-                          image: AssetImage('assets/man_with_mask_logo.png'),
-                        ),
-                        TextMainNormal(
-                            "The vaccine details available only for India",
-                            12.00),
-                        SizedBox(
-                          width: 300,
-                          child: Column(
-                            children: [
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: 'Select your state'),
-                                value: intialValueState,
-                                onChanged: (String? newvalue) {
-                                  print(newvalue);
-                                  getDistrict(newvalue);
-                                  setState(() {
-                                    card = false;
-                                    intialValueState = newvalue!;
-                                  });
-                                },
-                                items: states
-                                    .map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem(
-                                    value: value["state_id"].toString(),
-                                    child: Text(value["state_name"].toString()),
-                                  );
-                                }).toList(),
-                                hint: Text('Select your state'),
-                              ),
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: 'Select your district'),
-                                value: initialDistrictValue.toString(),
-                                onChanged: (String? newvalue) {
-                                  setState(() {
-                                    card = false;
-                                    districtId = newvalue.toString();
-                                    initialDistrictValue = newvalue.toString();
-                                  });
-                                },
-                                items: district["districts"]
-                                    .map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem(
-                                    value: value["district_id"].toString(),
-                                    child:
-                                        Text(value["district_name"].toString()),
-                                  );
-                                }).toList(),
-                              ),
-                              DateTimeField(
-                                format: _format,
-                                onShowPicker: (context, currentvalue) {
-                                  return showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(2021),
-                                      initialDate: DateTime.now(),
-                                      lastDate: DateTime(2024));
-                                },
-                                decoration: InputDecoration(
-                                    labelText: "Select the date"),
-                                onChanged: (_date) {
-                                  setState(() {
-                                    card = false;
-                                    date = _format.format(_date!);
-                                  });
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(40),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  GetCenter(districtId, date)
-                                      .getVaccine()
-                                      .then((res) {
-                                    setState(() {
-                                      centers = res["sessions"];
-                                      card = true;
-                                    });
-                                  });
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.cyan),
-                                  foregroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Colors.white),
-                                ),
-                                child: Text("Search Center"),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(20),
-                              ),
-                              LayoutBuilder(builder: (BuildContext context,
-                                  BoxConstraints viewportConstraints) {
-                                if (card) {
-                                  return SizedBox(
-                                    height: height * 0.7,
-                                    child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: centers.length,
-                                        itemBuilder: (context, int index) {
-                                          return Container(
-                                            padding: EdgeInsets.all(8),
-                                            margin: EdgeInsets.all(6),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1),
-                                                    spreadRadius: 2,
-                                                    blurRadius: 7,
-                                                    offset: Offset(1, 1),
-                                                  )
-                                                ]),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                RichText(
-                                                    text: TextSpan(
-                                                        style:
-                                                            DefaultTextStyle.of(
-                                                                    context)
-                                                                .style,
-                                                        children: [
-                                                      TextSpan(
-                                                        text: "Hospital Name: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["name"]),
-                                                      TextSpan(
-                                                        text: "\nAddress: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["address"]),
-                                                      TextSpan(
-                                                        text: "\nArea: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["block_name"]),
-                                                      TextSpan(
-                                                        text: "\nFee Type: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["fee_type"]),
-                                                      TextSpan(
-                                                        text: "\nDate: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["date"]),
-                                                      TextSpan(
-                                                        text: "\nFee: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                              ["fee"]),
-                                                      TextSpan(
-                                                        text: "\nVaccnine: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index]
-                                                                  ["vaccine"]
-                                                              .toString()),
-                                                      TextSpan(
-                                                        text: "\nMin age: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index][
-                                                                  "min_age_limit"]
-                                                              .toString()),
-                                                      TextSpan(
-                                                        text:
-                                                            "\nAvailable capacity dose 1: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index][
-                                                                  "available_capacity_dose1"]
-                                                              .toString()),
-                                                      TextSpan(
-                                                        text:
-                                                            "\nAvailable capacity dose 2: ",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                      TextSpan(
-                                                          text: centers[index][
-                                                                  "available_capacity_dose2"]
-                                                              .toString()),
-                                                    ])),
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                  );
-                                } else {
-                                  return Container();
-                                }
-                              }),
-                            ],
+              // Body
+              // Scrollable widget
+              Container(
+                padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 5),
+              ),
+              SizedBox(
+                height: height - 82,
+                width: width,
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints viewportConstraints) {
+                  return SingleChildScrollView(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Image(
+                            width: 250,
+                            height: 250,
+                            image: AssetImage('assets/man_with_mask_logo.png'),
                           ),
-                        ),
-                      ],
+                          TextMainNormal(
+                              "The vaccine details available only for India",
+                              12.00),
+                          SizedBox(
+                            width: 300,
+                            child: Column(
+                              children: [
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                      labelText: 'Select your state'),
+                                  value: intialValueState,
+                                  onChanged: (String? newvalue) {
+                                    print(newvalue);
+                                    getDistrict(newvalue);
+                                    setState(() {
+                                      card = false;
+                                      intialValueState = newvalue!;
+                                    });
+                                  },
+                                  items: states
+                                      .map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem(
+                                      value: value["state_id"].toString(),
+                                      child: Text(value["state_name"].toString()),
+                                    );
+                                  }).toList(),
+                                  hint: Text('Select your state'),
+                                ),
+                                DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                      labelText: 'Select your district'),
+                                  value: initialDistrictValue.toString(),
+                                  onChanged: (String? newvalue) {
+                                    setState(() {
+                                      card = false;
+                                      districtId = newvalue.toString();
+                                      initialDistrictValue = newvalue.toString();
+                                    });
+                                  },
+                                  items: district["districts"]
+                                      .map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem(
+                                      value: value["district_id"].toString(),
+                                      child:
+                                          Text(value["district_name"].toString()),
+                                    );
+                                  }).toList(),
+                                ),
+                                DateTimeField(
+                                  format: _format,
+                                  onShowPicker: (context, currentvalue) {
+                                    return showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(2021),
+                                        initialDate: DateTime.now(),
+                                        lastDate: DateTime(2024));
+                                  },
+                                  decoration: InputDecoration(
+                                      labelText: "Select the date"),
+                                  onChanged: (_date) {
+                                    setState(() {
+                                      card = false;
+                                      date = _format.format(_date!);
+                                    });
+                                  },
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(40),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    GetCenter(districtId, date)
+                                        .getVaccine()
+                                        .then((res) {
+                                      setState(() {
+                                        centers = res["sessions"];
+                                        card = true;
+                                      });
+                                    });
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.cyan),
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.white),
+                                  ),
+                                  child: Text("Search Center"),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(20),
+                                ),
+                                LayoutBuilder(builder: (BuildContext context,
+                                    BoxConstraints viewportConstraints) {
+                                  if (card) {
+                                    return SizedBox(
+                                      height: height * 0.3,
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: centers.length,
+                                          itemBuilder: (context, int index) {
+                                            return Container(
+                                              padding: EdgeInsets.all(15),
+                                              margin: EdgeInsets.all(3),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1),
+                                                      spreadRadius: 2,
+                                                      blurRadius: 7,
+                                                      offset: Offset(1, 1),
+                                                    )
+                                                  ]),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  RichText(
+                                                      text: TextSpan(
+                                                          style:
+                                                              DefaultTextStyle.of(
+                                                                      context)
+                                                                  .style,
+                                                          children: [
+                                                        TextSpan(
+                                                          text: "Hospital Name: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["name"]),
+                                                        TextSpan(
+                                                          text: "\nAddress: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["address"]),
+                                                        TextSpan(
+                                                          text: "\nArea: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["block_name"]),
+                                                        TextSpan(
+                                                          text: "\nFee Type: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["fee_type"]),
+                                                        TextSpan(
+                                                          text: "\nDate: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["date"]),
+                                                        TextSpan(
+                                                          text: "\nFee: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                ["fee"]),
+                                                        TextSpan(
+                                                          text: "\nVaccnine: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index]
+                                                                    ["vaccine"]
+                                                                .toString()),
+                                                        TextSpan(
+                                                          text: "\nMin age: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index][
+                                                                    "min_age_limit"]
+                                                                .toString()),
+                                                        TextSpan(
+                                                          text:
+                                                              "\nAvailable capacity dose 1: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index][
+                                                                    "available_capacity_dose1"]
+                                                                .toString()),
+                                                        TextSpan(
+                                                          text:
+                                                              "\nAvailable capacity dose 2: ",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                        TextSpan(
+                                                            text: centers[index][
+                                                                    "available_capacity_dose2"]
+                                                                .toString()),
+                                                      ])),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                }),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
-            ),
-          ],
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );
