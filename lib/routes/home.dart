@@ -459,6 +459,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                                 fontWeight: FontWeight.w700,
                                               ),
                                             ),
+
                                           ],
                                         ),
                                       ),
@@ -497,6 +498,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+
       ),
       drawer: Drawer(
         child: SafeArea(
@@ -552,6 +554,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 height: 40,
               ),
             ],
+
           ),
         ),
       ),
