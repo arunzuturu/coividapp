@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'home.dart';
 
 //class  extends StatelessWidget{
 class SignupPage extends StatefulWidget {
@@ -7,8 +10,11 @@ class SignupPage extends StatefulWidget {
   _SignupPageState createState() => _SignupPageState();
 }
 class _SignupPageState extends State<SignupPage> {
+  late String _email, _password;
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -31,6 +37,7 @@ class _SignupPageState extends State<SignupPage> {
               Column(
                 children: <Widget>[
                   TextField(
+
                     decoration: InputDecoration(
                       labelText: "Full Name",
                       labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
@@ -47,6 +54,12 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   SizedBox(height: 16,),
                   TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      setState(() {
+                        _email = value.trim();
+                      });
+                    },
                     decoration: InputDecoration(
                       labelText: "Email ID",
                       labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
@@ -64,6 +77,11 @@ class _SignupPageState extends State<SignupPage> {
                   SizedBox(height: 16,),
                   TextField(
                     obscureText: true,
+                    onChanged: (value) {
+                      setState(() {
+                        _password = value.trim();
+                      });
+                    },
                     decoration: InputDecoration(
                       labelText: "Password",
                       labelStyle: TextStyle(fontSize: 14,color: Colors.grey.shade400,fontWeight: FontWeight.w600),
@@ -101,10 +119,16 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          constraints: BoxConstraints(minHeight: 50,maxWidth: double.infinity),
-                          child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,),
+                        child: InkWell(
+                          onTap: (){
+    auth.createUserWithEmailAndPassword(email: _email, password: _password).then((_){
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => Home()));
+    });},
+                          child: Container(
+                            alignment: Alignment.center,
+                            constraints: BoxConstraints(minHeight: 50,maxWidth: double.infinity),
+                            child: Text("Sign up",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,),
+                          ),
                         ),
                       ),
                     ),
