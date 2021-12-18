@@ -14,9 +14,9 @@ class _SymptomsState extends State<Symptoms> {
     var screenSize = MediaQuery.of(context).size;
     var width = screenSize.width;
     var height = screenSize.height;
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,7 +37,7 @@ class _SymptomsState extends State<Symptoms> {
               ],
             ),
             SizedBox(
-              height: height - 72,
+              height: height - 100,
               child: LayoutBuilder(
                 builder:
                     (BuildContext context, BoxConstraints viewportConstraints) {
