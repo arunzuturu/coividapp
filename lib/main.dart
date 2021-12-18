@@ -1,6 +1,6 @@
 import 'package:covid/api/api.dart';
-import 'package:covid/routes/auth.dart';
 import 'package:covid/routes/safety.dart';
+import 'package:covid/routes/signin.dart';
 import 'package:covid/routes/splash.dart';
 import 'package:covid/routes/treatment.dart';
 import 'package:covid/routes/uilogin.dart';
@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
-        '/signin':(context) => SignupPage(), //LoginScreen()
+        '/signup':(context) => SignupPage(),
+        '/signin':(context) => LoginPage(), //LoginScreen()
         '/home': (context) => Home(),
         '/symptoms': (context) => Symptoms(),
         '/safety': (context) => Safety(),
@@ -41,3 +42,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+

@@ -166,7 +166,7 @@ class _SignupPageState extends State<SignupPage> {
                       onTap: (){
                         // Navigator.pop(context);
                       },
-                      child: Text("Sign in.",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                      child: GestureDetector(onTap: (){Navigator.popAndPushNamed(context, '/signin');},child: Text("Sign in.",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),)),
                     )
                   ],
                 ),
