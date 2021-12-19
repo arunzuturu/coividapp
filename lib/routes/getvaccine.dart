@@ -115,7 +115,7 @@ class _GetVaccineRouteState extends State<GetVaccineRoute> {
                           Image(
                             width: 250,
                             height: 250,
-                            image: AssetImage('assets/man_with_mask_logo.png'),
+                            image: AssetImage('assets/5.png'),
                           ),
                           TextMainNormal(
                               "The vaccine details available only for India",
