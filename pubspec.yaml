@@ -27,7 +27,7 @@ dependencies:
   flutter_ringtone_player: ^3.1.1
   http: ^0.13.2
   geolocator: ^8.0.1
-  url_launcher: ^6.0.3
+  url_launcher: ^6.0.9
   datetime_picker_formfield: ^2.0.0
   cloud_firestore: ^2.5.4
   firebase_database: ^8.0.1

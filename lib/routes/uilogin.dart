@@ -47,7 +47,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.red),
+                        borderSide: BorderSide(color: Colors.blueAccent),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
                     ),
@@ -69,7 +69,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.red),
+                        borderSide: BorderSide(color: Colors.blueAccent),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
                     ),
@@ -91,7 +91,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.red),
+                        borderSide: BorderSide(color: Colors.blueAccent),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.auto,
                     ),
@@ -166,7 +166,7 @@ class _SignupPageState extends State<SignupPage> {
                       onTap: (){
                         // Navigator.pop(context);
                       },
-                      child: GestureDetector(onTap: (){Navigator.popAndPushNamed(context, '/signin');},child: Text("Sign in.",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),)),
+                      child: GestureDetector(onTap: (){Navigator.popAndPushNamed(context, '/signin');},child: Text("Sign in.",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.blue),)),
                     )
                   ],
                 ),

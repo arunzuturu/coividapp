@@ -32,9 +32,9 @@ class _SplashState extends State<Splash> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image(
-                  width: 120.0,
+                  width: 300.0,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage("assets/logo.png"),
+                  image: AssetImage("assets/corona.png"),
                 ),
                 TextMainNormal('\nCOVID-19 Tracker App', 18)
               ],
