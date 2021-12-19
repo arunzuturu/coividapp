@@ -15,6 +15,10 @@ class Trace extends StatefulWidget {
 }
 
 class _TraceState extends State<Trace> {
+  Stream<QuerySnapshot> getItems() async* {
+    yield* FirebaseFirestore.instance.collection("items").snapshots();
+  }
+
   late String _name, _status;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   Geoflutterfire geo = Geoflutterfire();
