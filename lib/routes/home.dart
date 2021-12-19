@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
 
@@ -524,12 +525,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   Navigator.popAndPushNamed(context, '/symptoms');
                 },
               ),
-              ListTile(
-                title: TextMainNormal('Safety Measure', 14),
-                onTap: () {
-                  Navigator.popAndPushNamed(context, '/safety');
-                },
-              ),
 
               ListTile(
                 title: TextMainNormal('Find Vaccine', 14),
@@ -541,6 +536,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 title: TextMainNormal('Isolate', 14),
                 onTap: () {
                   Navigator.popAndPushNamed(context, '/isolation');
+                },
+              ),
+              ListTile(
+                title: TextMainNormal('Show Intensity', 14),
+                onTap: () {
+                 launchURL();
                 },
               ),
               ListTile(
@@ -562,12 +563,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 }
 
-_launchURL() async {
+
+launchURL() async {
   const url =
-      'https://discord.com/api/oauth2/authorize?client_id=835763513100206100&permissions=2147560448&scope=bot';
+      'https://news.google.com/covid19/map?hl=en-IN&gl=IN&ceid=IN%3Aen';
   if (await canLaunch(url)) {
-    await launch(url);
+    await launch(url,forceWebView: true,);
   } else {
     throw 'Could not launch $url';
   }
 }
+
+

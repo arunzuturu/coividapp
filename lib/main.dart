@@ -1,9 +1,7 @@
 
 import 'package:covid/routes/isolation.dart';
-import 'package:covid/routes/safety.dart';
 import 'package:covid/routes/signin.dart';
 import 'package:covid/routes/splash.dart';
-import 'package:covid/routes/treatment.dart';
 import 'package:covid/routes/uilogin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,11 +32,8 @@ class MyApp extends StatelessWidget {
         '/signin':(context) => LoginPage(), //LoginScreen()
         '/home': (context) => Home(),
         '/symptoms': (context) => Symptoms(),
-        '/safety': (context) => Safety(),
-        '/treatment': (context) => Treatment(),
         '/getvaccine': (context) => GetVaccineRoute(),
-        '/isolation' :(context) => CountdownPage(),
-
+        '/isolation' :(context) => Treatment(),
       },
     );
   }
