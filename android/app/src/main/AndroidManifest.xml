@@ -8,6 +8,7 @@
 
         android:label="COVID-19 Tracker"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDhu7z022p-HHE-MTQ4Q9TE9HYMQ2H8AVA"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

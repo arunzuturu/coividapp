@@ -29,7 +29,9 @@ dependencies:
   geolocator: ^8.0.1
   url_launcher: ^6.0.3
   datetime_picker_formfield: ^2.0.0
-  cloud_firestore: ^2.5.4
+  cloud_firestore: ^2.3.0
+  geoflutterfire: ^3.0.1
+  google_maps_flutter: 2.1.1
   firebase_database: ^8.0.1
   firebase_core: ^1.8.0
   firebase_auth: ^3.3.3

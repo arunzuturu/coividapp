@@ -11,6 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Trace.dart';
+
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -221,6 +223,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   var data = "";
   var dropdownValue = "global";
   final auth = FirebaseAuth.instance;
+  dynamic latitude;
+  dynamic longitude;
   @override
   void initState() {
     super.initState();
@@ -271,8 +275,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
 
-    print(pos.latitude);
-    print(pos.longitude);
+    latitude = pos.latitude;
+    longitude = pos.longitude;
   }
 
   @override
@@ -545,12 +549,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 },
               ),
               ListTile(
+                title: TextMainNormal('Trace', 14),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Trace(
+                        latitude:latitude ,
+                        longitude: longitude,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
                 title: TextMainNormal('Logout', 14),
                 onTap: () {
                   auth.signOut();
                   Navigator.popAndPushNamed(context, '/signin');
                 },
               ),
+
               SizedBox(
                 height: 40,
               ),
