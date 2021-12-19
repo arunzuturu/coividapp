@@ -333,9 +333,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         children: [
                           Center(
                             child: Image(
-                              width: 250,
-                              height: 250,
-                              image: AssetImage("assets/man_with_mask_logo.png"),
+                              width: 325,
+                              height: 325,
+                              image: AssetImage("assets/corona.png"),
                             ),
                           ),
                           DropdownButton(
@@ -510,19 +510,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
               Stack(
                 children: [
-                  Image(
-                    image: NetworkImage(
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ9-FOkOmBBfNqIBPa-zvUxw_pvveKdaI0oQ&usqp=CAU"),
-                    fit: BoxFit.fitWidth,
+                  Center(
+                    child: Image(
+                      image: AssetImage("assets/corona.png"),
+                      width: 150,
+                      //fit: BoxFit.fitWidth,
+                    ),
                   ),
                 ],
               ),
               SizedBox(
                 height: 40,
               ),
-              Center(child: TextMainNormal("About Corona", 12)),
+              Center(child: TextMainNormal("Features", 12)),
               ListTile(
                 title: TextMainNormal('Symptoms', 14),
                 onTap: () {
@@ -531,7 +536,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               ),
 
               ListTile(
-                title: TextMainNormal('Find Vaccine', 14),
+                title: TextMainNormal('Vaccine', 14),
                 onTap: () {
                   Navigator.popAndPushNamed(context, '/getvaccine');
                 },
@@ -543,9 +548,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 },
               ),
               ListTile(
-                title: TextMainNormal('Show Intensity', 14),
+                title: TextMainNormal('Intensity', 14),
                 onTap: () {
-                 launchURL();
+                  _launchURLBrowser();
                 },
               ),
               ListTile(
@@ -583,11 +588,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 }
 
 
-launchURL() async {
-  const url =
-      'https://news.google.com/covid19/map?hl=en-IN&gl=IN&ceid=IN%3Aen';
+_launchURLBrowser() async {
+  const url = 'https://news.google.com/covid19/map?hl=en-IN&gl=IN&ceid=IN%3Aen';
   if (await canLaunch(url)) {
-    await launch(url,forceWebView: true,);
+    await launch(url);
   } else {
     throw 'Could not launch $url';
   }
