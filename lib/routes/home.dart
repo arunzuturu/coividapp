@@ -26,7 +26,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   var recovered = 0;
   var deaths = 0;
   var countries = [
-    'global',
+    'Global',
     'Afghanistan',
     'Albania',
     'Algeria',
@@ -221,7 +221,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     'Zimbabwe'
   ];
   var data = "";
-  var dropdownValue = "global";
+  var dropdownValue = "India";
   final auth = FirebaseAuth.instance;
   dynamic latitude;
   dynamic longitude;
@@ -333,34 +333,38 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         children: [
                           Center(
                             child: Image(
-                              width: 325,
-                              height: 325,
+                              width: width,
+                              height: height*0.3,
                               image: AssetImage("assets/corona.png"),
                             ),
                           ),
-                          DropdownButton(
-                              value: dropdownValue,
-                              hint: Text('Select country'),
-                              onChanged: (String? newvalue) {
-                                setState(() {
-                                  dropdownValue = newvalue!;
-                                  var response =
-                                      GetCases(newvalue).getCases().then((res) {
-                                    setState(() {
-                                      var confirmed = res['confirmed']['value'];
-                                      recovered = res['recovered']['value'];
-                                      deaths = res['deaths']['value'];
-                                      active = confirmed - (recovered + deaths);
+                          Container(
+                            width: 300,
+                            child: DropdownButton(
+                                isExpanded: true,
+                                value: dropdownValue,
+                                hint: Text('Select country'),
+                                onChanged: (String? newvalue) {
+                                  setState(() {
+                                    dropdownValue = newvalue!;
+                                    var response =
+                                        GetCases(newvalue).getCases().then((res) {
+                                      setState(() {
+                                        var confirmed = res['confirmed']['value'];
+                                        recovered = res['recovered']['value'];
+                                        deaths = res['deaths']['value'];
+                                        active = confirmed - (recovered + deaths);
+                                      });
                                     });
                                   });
-                                });
-                              },
-                              items: countries.map((String value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList()),
+                                },
+                                items: countries.map((String value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList()),
+                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -378,8 +382,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       boxShadow: [
                                         BoxShadow(
                                             color: Colors.black12,
-                                            blurRadius: 2.0,
-                                            spreadRadius: 0.0,
+                                            blurRadius: 5.0,
+                                            spreadRadius: 5.0,
                                             offset: Offset(0.0, 0.0))
                                       ]),
                                   child: Column(
@@ -439,8 +443,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       boxShadow: [
                                         BoxShadow(
                                             color: Colors.black12,
-                                            blurRadius: 2.0,
-                                            spreadRadius: 0.0,
+                                            blurRadius: 5.0,
+                                            spreadRadius: 5.0,
                                             offset: Offset(0.0, 0.0))
                                       ]),
                                   child: Column(
